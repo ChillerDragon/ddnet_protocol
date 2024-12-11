@@ -112,6 +112,10 @@ typedef struct {
 typedef struct {
 	PacketKind kind;
 	PacketHeader header;
+	uint8_t data[MAX_PACKET_SIZE];
+	size_t data_len;
+	uint8_t data_decompressed[MAX_PACKET_SIZE];
+	size_t data_decompressed_len;
 	union {
 		PacketControl *control;
 		Chunk chunks[MAX_CHUNKS];
@@ -125,6 +129,11 @@ typedef struct {
 // So it is the responsibility of the payload unpacker to parse the token.
 // https://github.com/MilkeeyCat/ddnet_protocol/issues/54
 PacketHeader decode_packet_header(uint8_t *buf);
+
+// Extract and decompress packet payload.
+// Given a full raw packet as `full_data`
+// It will extract only the payload into `payload` and return the size of the payload.
+size_t get_packet_payload(PacketHeader *header, uint8_t *full_data, size_t full_len, uint8_t *payload, size_t payload_len, Error *err);
 
 // Given a pointer to the beginning of a udp payload
 // this determins the type of packet.
