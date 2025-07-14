@@ -160,7 +160,7 @@ Error packer_add_raw(Packer *packer, const uint8_t *data, size_t size) {
 	return ERR_NONE;
 }
 
-void unpacker_init(Unpacker *unpacker, uint8_t *buf, size_t len) {
+void unpacker_init(Unpacker *unpacker, const uint8_t *buf, size_t len) {
 	unpacker->err = ERR_NONE;
 	unpacker->buf = buf;
 	unpacker->buf_end = buf + len;

@@ -52,8 +52,8 @@ received from the peer
 ```C
 typedef struct {
 	Error err;
-	uint8_t *buf_end;
-	uint8_t *buf;
+	const uint8_t *buf_end;
+	const uint8_t *buf;
 } Unpacker;
 ```
 
@@ -192,7 +192,7 @@ call `packer_data()` to receive the full packed data
 ## Syntax
 
 ```C
-void unpacker_init(Unpacker *packer, uint8_t *buf, size_t len);
+void unpacker_init(Unpacker *packer, const uint8_t *buf, size_t len);
 ```
 
 returns a new `Unpacker` instance

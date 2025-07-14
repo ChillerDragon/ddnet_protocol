@@ -3,9 +3,9 @@
 #include "message.h"
 #include "packet.h"
 
-size_t fetch_chunks(uint8_t *buf, size_t len, PacketHeader *header, OnChunk callback, void *ctx, Error *err) {
-	uint8_t *start = buf;
-	uint8_t *end = buf + len;
+size_t fetch_chunks(const uint8_t *buf, size_t len, PacketHeader *header, OnChunk callback, void *ctx, Error *err) {
+	const uint8_t *start = buf;
+	const uint8_t *end = buf + len;
 	uint8_t num_chunks = 0;
 
 	while(true) {

@@ -35,7 +35,7 @@ typedef enum {
 // `buf` which has to point to the beginning of the chunk payload
 //
 // this function could also be called decode_chunk_payload()
-Error decode_message(Chunk *chunk, uint8_t *buf);
+Error decode_message(Chunk *chunk, const uint8_t *buf);
 
 size_t encode_message(Chunk *chunk, uint8_t *buf, Error *err);
 

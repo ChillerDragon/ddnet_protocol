@@ -35,8 +35,8 @@ typedef enum {
 // See also `unpacker_init` and `unpacker_get_int`
 typedef struct {
 	Error err;
-	uint8_t *buf_end;
-	uint8_t *buf;
+	const uint8_t *buf_end;
+	const uint8_t *buf;
 } Unpacker;
 
 // maximum output and storage size in bytes
@@ -104,7 +104,7 @@ Error packer_add_raw(Packer *packer, const uint8_t *data, size_t size);
 // unpacker_get_int(&unpacker); // => 2
 // unpacker.err; // => Error::ERR_NONE
 // ```
-void unpacker_init(Unpacker *packer, uint8_t *buf, size_t len);
+void unpacker_init(Unpacker *packer, const uint8_t *buf, size_t len);
 
 // amount of bytes that have not yet been unpacked
 size_t unpacker_remaining_size(Unpacker *unpacker);

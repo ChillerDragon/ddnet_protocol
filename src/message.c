@@ -55,7 +55,7 @@ static Error decode_system_message(Chunk *chunk, MessageId msg_id, Unpacker *unp
 	return unpacker->err;
 }
 
-Error decode_message(Chunk *chunk, uint8_t *buf) {
+Error decode_message(Chunk *chunk, const uint8_t *buf) {
 	Unpacker unpacker;
 	unpacker_init(&unpacker, buf, chunk->header.size);
 	int32_t msg_and_sys = unpacker_get_int(&unpacker);
