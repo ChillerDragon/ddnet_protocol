@@ -5,6 +5,7 @@
 #include <ddnet_protocol/packer.h>
 #include <ddnet_protocol/packet.h>
 #include <ddnet_protocol/snapshot.h>
+#include <stdio.h>
 
 DDNetError ddnet_unpack_int_array_as_str(DDNetUnpacker *unpacker, size_t num_ints, char *str, size_t str_len) {
 	uint32_t ints[6] = {};
@@ -116,10 +117,10 @@ DDNetError ddnet_decode_snap_item(DDNetUnpacker *unpacker, DDNetSnapItem *item) 
 		item->item.client_info.color_feet = ddnet_unpacker_get_int(unpacker);
 		break;
 	default:
-		// // TODO: remove debug
-		// if(item->item.unknown.type_id > 0 && item->item.unknown.type_id < 3000) {
-		// 	printf("unknown snap item type %d, size=%d\n", item->item.unknown.type_id, item->item.unknown.size);
-		// }
+		// TODO: remove debug
+		if(item->item.unknown.type_id > 0 && item->item.unknown.type_id < 3000) {
+			printf("unknown snap item type %d, size=%d\n", item->item.unknown.type_id, item->item.unknown.size);
+		}
 
 		item->kind = DDNET_ITEM_KIND_UNKNOWN;
 		int32_t len = ddnet_unpacker_get_int(unpacker);
