@@ -358,7 +358,7 @@ void twclient_on_network_data(TwClient *client, uint8_t *buf, size_t len) {
 
 		fprintf(stderr, "packet decode error %d\n", err);
 
-		char hex[2048];
+		char hex[200000];
 		str_hex(hex, sizeof(hex), buf, (int)len);
 		printf("got %ld bytes: %s\n", len, hex);
 
