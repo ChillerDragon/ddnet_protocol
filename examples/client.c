@@ -1,10 +1,12 @@
 #include <errno.h>
+#include <arpa/inet.h>
 #include <netinet/in.h>
 #include <signal.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 #include <sys/ioctl.h>
 #include <sys/socket.h>
 #include <time.h>
@@ -120,12 +122,16 @@ void twclient_send_packet(TwClient *client, DDNetPacket *packet) {
 	twclient_send(client, buf, len);
 }
 
-void twclient_connect(TwClient *client) {
+void twclient_connect(TwClient *client, const char *server_ip, int server_port) {
 	client->server_addr.sin_family = AF_INET;
-	client->server_addr.sin_port = htons(8303);
-	unsigned char dst_ip[4] = {127, 0, 0, 1};
-	memcpy(&client->server_addr.sin_addr.s_addr, dst_ip, 4);
+	if(inet_pton(AF_INET, server_ip, &(client->server_addr.sin_addr)) != 1) {
+		fprintf(stderr, "Invalid server ip '%s' (should not contain port)\n", server_ip);
+		exit(1);
+	}
 
+	client->server_addr.sin_port = htons(server_port);
+
+	printf("connecting to %s:%d ...\n", server_ip, server_port);
 	twclient_init_ddnet(client);
 
 	DDNetPacket packet = {
@@ -386,10 +392,30 @@ void sigint_handler(int sig) {
 	got_sigint = true;
 }
 
-int main() {
+int main(int argc, char *argv[]) {
 	TwClient client = {};
+
+	const char *server_ip = "127.0.0.1";
+	int32_t server_port = 8303;
+
+	for(int32_t i = 0; i < argc; i++) {
+		if(!i) {
+			continue;
+		}
+
+		if(!strcmp(argv[i], "-h") || !strcmp(argv[i], "--help")) {
+			puts("usage: client [server_ip] [server_port]");
+			exit(0);
+		}
+		if(i == 1) {
+			server_ip = argv[i];
+		} else if(i == 2) {
+			server_port = atoi(argv[i]);
+		}
+	}
+
 	twclient_init(&client);
-	twclient_connect(&client);
+	twclient_connect(&client, server_ip, server_port);
 
 	signal(SIGINT, sigint_handler);
 
